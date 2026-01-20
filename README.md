@@ -53,3 +53,4 @@ python transcribe.py sample.wav --model medium --output out/transcript.txt
 - The script prefers `faster-whisper` and falls back to `openai-whisper` if
   needed.
 - Output is written next to the input unless `--output` is provided.
+- Recommend using tiny model for larger audio files or low CPU availability.
