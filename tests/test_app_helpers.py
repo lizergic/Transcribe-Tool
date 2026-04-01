@@ -1,3 +1,7 @@
+import os
+import tempfile
+from unittest.mock import patch
+
 from app_helpers import (
     QUALITY_CHOICES,
     FORMAT_CHOICES,
@@ -5,6 +9,7 @@ from app_helpers import (
     quality_to_model,
     format_label_to_ext,
     language_choice_to_code,
+    handle_transcribe,
 )
 
 
@@ -62,13 +67,6 @@ def test_format_label_to_ext_default_on_unknown():
 
 def test_language_choice_to_code_unknown_returns_none():
     assert language_choice_to_code("garbage") is None
-
-
-import tempfile
-import os
-from unittest.mock import patch, MagicMock
-
-from app_helpers import handle_transcribe
 
 
 def test_handle_transcribe_no_file_returns_error():

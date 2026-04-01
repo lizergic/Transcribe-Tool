@@ -121,7 +121,8 @@ def handle_transcribe(
             return f"Transcription failed: {err}", None
 
     base = os.path.splitext(os.path.basename(file_path))[0]
-    out_path = os.path.join(tempfile.gettempdir(), f"{base}.{fmt}")
+    out_dir = tempfile.mkdtemp()
+    out_path = os.path.join(out_dir, f"{base}.{fmt}")
 
     writer = WRITERS[fmt]
     writer(segments, out_path)
