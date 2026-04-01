@@ -27,6 +27,18 @@ python transcribe.py INPUT [--model MODEL] [--language LANG]
                            [--format {txt,srt,vtt,json}] [--output PATH]
 ```
 
+## GUI
+
+Launch the web interface:
+
+```bash
+python app.py
+```
+
+Opens a browser tab at `http://localhost:7860`. Upload a file, pick a quality level,
+and click Transcribe. Advanced options (output format, language) are available under
+the expandable section.
+
 ## Flags
 
 - `--model`: Whisper model name. Examples: `tiny`, `base`, `small`, `medium`,
