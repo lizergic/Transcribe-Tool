@@ -1,4 +1,16 @@
+import os
+import tempfile
+
 from shutil import which
+
+from transcribe import (
+    transcribe_with_faster_whisper,
+    transcribe_with_openai_whisper,
+    write_txt,
+    write_srt,
+    write_vtt,
+    write_json,
+)
 
 QUALITY_MAP = {
     "Fast (lower quality)": "tiny",
@@ -63,3 +75,58 @@ def check_ffmpeg() -> str | None:
             "  Linux (apt): sudo apt-get install ffmpeg"
         )
     return None
+
+
+WRITERS = {
+    "txt": write_txt,
+    "srt": write_srt,
+    "vtt": write_vtt,
+    "json": write_json,
+}
+
+
+def handle_transcribe(
+    file_path: str | None,
+    quality: str,
+    fmt_label: str,
+    language_label: str,
+) -> tuple[str, str | None]:
+    """Run transcription and return (preview_text, output_file_path)."""
+    if not file_path:
+        return "Please upload an audio or video file first.", None
+
+    ffmpeg_err = check_ffmpeg()
+    if ffmpeg_err:
+        return ffmpeg_err, None
+
+    model = quality_to_model(quality)
+    fmt = format_label_to_ext(fmt_label)
+    lang = language_choice_to_code(language_label)
+
+    try:
+        segments = transcribe_with_faster_whisper(file_path, model, lang)
+    except Exception as err:
+        if "No module named" in str(err):
+            try:
+                segments = transcribe_with_openai_whisper(file_path, model, lang)
+            except Exception as err2:
+                return (
+                    f"Transcription failed. Install dependencies:\n"
+                    f"  pip install -r requirements.txt\n"
+                    f"Also ensure ffmpeg is installed and on PATH.\n"
+                    f"Details: {err2}",
+                    None,
+                )
+        else:
+            return f"Transcription failed: {err}", None
+
+    base = os.path.splitext(os.path.basename(file_path))[0]
+    out_path = os.path.join(tempfile.gettempdir(), f"{base}.{fmt}")
+
+    writer = WRITERS[fmt]
+    writer(segments, out_path)
+
+    with open(out_path, "r", encoding="utf-8") as f:
+        preview = f.read()
+
+    return preview, out_path
