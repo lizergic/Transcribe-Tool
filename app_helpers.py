@@ -18,6 +18,7 @@ FORMAT_CHOICES = [
 
 FORMAT_LABELS = [label for label, _ in FORMAT_CHOICES]
 FORMAT_DEFAULT = "TXT (plain text)"
+FORMAT_MAP = dict(FORMAT_CHOICES)
 
 LANGUAGE_OPTIONS = [
     ("Auto-detect", None),
@@ -37,6 +38,7 @@ LANGUAGE_OPTIONS = [
 
 LANGUAGE_CHOICES = [label for label, _ in LANGUAGE_OPTIONS]
 LANGUAGE_DEFAULT = "Auto-detect"
+LANGUAGE_MAP = dict(LANGUAGE_OPTIONS)
 
 
 def quality_to_model(label: str) -> str:
@@ -44,13 +46,11 @@ def quality_to_model(label: str) -> str:
 
 
 def format_label_to_ext(label: str) -> str:
-    mapping = {l: ext for l, ext in FORMAT_CHOICES}
-    return mapping.get(label, "txt")
+    return FORMAT_MAP.get(label, "txt")
 
 
 def language_choice_to_code(label: str) -> str | None:
-    mapping = {l: code for l, code in LANGUAGE_OPTIONS}
-    return mapping.get(label)
+    return LANGUAGE_MAP.get(label)
 
 
 def check_ffmpeg() -> str | None:

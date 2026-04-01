@@ -3,6 +3,7 @@ from app_helpers import (
     FORMAT_CHOICES,
     LANGUAGE_CHOICES,
     quality_to_model,
+    format_label_to_ext,
     language_choice_to_code,
 )
 
@@ -45,3 +46,19 @@ def test_language_english_maps_to_code():
 
 def test_language_spanish_maps_to_code():
     assert language_choice_to_code("es — Spanish") == "es"
+
+
+def test_format_label_to_ext_txt():
+    assert format_label_to_ext("TXT (plain text)") == "txt"
+
+
+def test_format_label_to_ext_srt():
+    assert format_label_to_ext("SRT (subtitles)") == "srt"
+
+
+def test_format_label_to_ext_default_on_unknown():
+    assert format_label_to_ext("garbage") == "txt"
+
+
+def test_language_choice_to_code_unknown_returns_none():
+    assert language_choice_to_code("garbage") is None
