@@ -57,7 +57,7 @@ with gr.Blocks(title="Transcript Tool") as demo:
         label="Transcript Preview",
         interactive=False,
         lines=12,
-        show_copy_button=True,
+        buttons=["copy"],
     )
     download = gr.File(label="Download", interactive=False)
 
