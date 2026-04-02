@@ -1,11 +1,12 @@
 # Transcribe Tool
 
 Local audio/video transcription using Whisper. Produces TXT, SRT, VTT, or JSON
-from a single command and runs fully offline.
+and runs fully offline. Use the **CLI** for scripting or the **web GUI** for a
+point-and-click experience.
 
 ## Requirements
 
-- Python 3.9+
+- Python 3.10+
 - ffmpeg on PATH
 
 ## Install
@@ -35,9 +36,15 @@ Launch the web interface:
 python app.py
 ```
 
-Opens a browser tab at `http://localhost:7860`. Upload a file, pick a quality level,
-and click Transcribe. Advanced options (output format, language) are available under
-the expandable section.
+Opens a browser tab at `http://localhost:7860`.
+
+1. Upload an audio or video file
+2. Pick a quality level — Fast (`tiny`), Balanced (`small`), or Best (`large-v3`)
+3. Click **Transcribe**
+
+Advanced options (output format, language) are available under the expandable
+accordion. The transcript appears in a preview pane with a copy button, and a
+download link is provided for the output file.
 
 ## Flags
 
@@ -62,7 +69,9 @@ python transcribe.py sample.wav --model medium --output out/transcript.txt
 
 ## Notes
 
-- The script prefers `faster-whisper` and falls back to `openai-whisper` if
-  needed.
-- Output is written next to the input unless `--output` is provided.
-- Recommend using tiny model for larger audio files or low CPU availability.
+- Both the CLI and GUI prefer `faster-whisper` and fall back to `openai-whisper`
+  if needed.
+- CLI output is written next to the input unless `--output` is provided.
+  GUI output is available via the download link.
+- Recommend using the tiny/Fast model for larger audio files or low CPU
+  availability.
